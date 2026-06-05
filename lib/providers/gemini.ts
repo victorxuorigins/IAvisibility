@@ -15,7 +15,7 @@ export class GeminiSearchProvider implements CitationProvider {
       // Delay to avoid free tier rate limiting (15 RPM)
       await new Promise(resolve => setTimeout(resolve, 1500));
 
-      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${this.apiKey}`, {
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${this.apiKey}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -28,7 +28,7 @@ export class GeminiSearchProvider implements CitationProvider {
           ],
           tools: [
             {
-              googleSearchRetrieval: {}
+              google_search: {}
             }
           ]
         }),
