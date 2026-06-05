@@ -251,10 +251,10 @@ export const translations = {
 
     // Help tab
     helpTitle: "Guía del Usuario",
-    helpDesc: "Cómo funciona GEO / AEO y la auditoría de Share of Voice.",
-    helpConceptHeader: "Concepto General",
-    helpConceptText1: "A diferencia del SEO tradicional enfocado en rastreadores de enlaces, el AEO (Answer Engine Optimization) o GEO (Generative Engine Optimization) audita qué información citan y recomiendan los LLMs en búsquedas conversacionales.",
-    helpConceptText2: "Los compradores B2B en etapas del funnel de compra (ej. selección, comparativas de producto) ya no hacen búsquedas de palabras clave simples en Google, sino preguntas descriptivas como \"¿Cuál es la mejor marca de compresores y qué alternativas energéticamente eficientes existen?\"",
+    helpDesc: "Guía paso a paso para ejecutar una auditoría de visibilidad en motores generativos.",
+    helpConceptHeader: "Cómo usar la aplicación",
+    helpConceptText1: "1. Registra tu empresa y sus competidores en el Paso 1 para definir los dominios a monitorear. 2. Configura las preguntas de intención de compra en el Paso 2 (puedes usar el asistente de IA o editarlas a mano). 3. Selecciona el proveedor en el Paso 3 (usa Datos Simulados para probar sin claves). 4. Inicia la auditoría y visualiza el Share of Voice y las brechas en el Dashboard.",
+    helpConceptText2: "Consejo: Puedes usar el modal de previsualización (Preview) en el Paso 2 para realizar pruebas individuales en tiempo real con cualquiera de los motores de búsqueda de IA antes de lanzar el análisis completo.",
     helpStepsHeader: "Pasos del Asistente",
     helpStep1Title: "Paso 1: Setup",
     helpStep1Text: "Define tu empresa y sus competidores. Esto nos permite clasificar las citas extraídas.",
@@ -563,10 +563,10 @@ export const translations = {
 
     // Help tab
     helpTitle: "User Guide",
-    helpDesc: "How GEO / AEO and Share of Voice audits work.",
-    helpConceptHeader: "General Concept",
-    helpConceptText1: "Unlike traditional SEO focused on link crawlers, AEO (Answer Engine Optimization) or GEO (Generative Engine Optimization) audits what information LLMs cite and recommend in conversational searches.",
-    helpConceptText2: "B2B buyers in purchase funnel stages (e.g. selection, product comparisons) no longer make simple keyword searches in Google, but descriptive questions such as \"What is the best brand of compressors and what energy-efficient alternatives exist?\"",
+    helpDesc: "Step-by-step guide to running a visibility audit in generative search engines.",
+    helpConceptHeader: "How to Use the Application",
+    helpConceptText1: "1. Register your company and key competitors in Step 1 to define the domains you want to monitor. 2. Configure buyer-intent questions in Step 2 (you can use the AI assistant or edit them manually). 3. Select your provider in Step 3 (use Simulated Data to test without credentials). 4. Launch the audit and visualize your Share of Voice and content gaps on the Dashboard.",
+    helpConceptText2: "Tip: You can use the preview modal (Preview) in Step 2 to perform individual real-time tests with any of the AI search engines before launching the full analysis.",
     helpStepsHeader: "Wizard Steps",
     helpStep1Title: "Step 1: Setup",
     helpStep1Text: "Define your company and competitors. This allows us to classify extracted citations.",
