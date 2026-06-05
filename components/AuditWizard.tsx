@@ -2309,10 +2309,44 @@ export default function AuditWizard() {
                            (generationEngine === "openai" && !openaiKey.trim()) ||
                            (generationEngine === "perplexity" && !perplexityKey.trim()))
                         ) && (
-                          <div className="text-[10px] text-amber-500 bg-amber-500/10 border border-amber-500/20 p-2.5 rounded-lg leading-relaxed font-sans">
-                            {lang === "es"
-                              ? `Nota: No has configurado una API Key para ${generationEngine.toUpperCase()} en tus ajustes. Se usará la clave del servidor o las plantillas por defecto.`
-                              : `Note: You haven't set a custom API Key for ${generationEngine.toUpperCase()} in settings. Server defaults or fallback templates will be used.`}
+                          <div className="text-[10px] text-amber-500 bg-amber-500/10 border border-amber-500/20 p-2.5 rounded-lg leading-relaxed font-sans space-y-2.5">
+                            <div>
+                              {lang === "es"
+                                ? `Nota: No has configurado una API Key para ${generationEngine.toUpperCase()} en tus ajustes. Se usará la clave del servidor o las plantillas por defecto.`
+                                : `Note: You haven't set a custom API Key for ${generationEngine.toUpperCase()} in settings. Server defaults or fallback templates will be used.`}
+                            </div>
+                            <div className="space-y-1">
+                              <label className="block text-[9px] font-bold text-gray-400 uppercase tracking-wider font-mono">
+                                {lang === "es" ? `Ingresar Clave para ${generationEngine.toUpperCase()} (Override)` : `Enter API Key for ${generationEngine.toUpperCase()} (Override)`}
+                              </label>
+                              <input
+                                type="password"
+                                placeholder={
+                                  generationEngine === "gemini" ? "AIzaSyxxxxxxxxxxxxxxxxx" :
+                                  generationEngine === "openai" ? "sk-proj-xxxxxxxxxxxxxxxx" :
+                                  "pplx-xxxxxxxxxxxxxxxxxx"
+                                }
+                                value={
+                                  generationEngine === "gemini" ? geminiKey :
+                                  generationEngine === "openai" ? openaiKey :
+                                  perplexityKey
+                                }
+                                onChange={(e) => {
+                                  const val = e.target.value;
+                                  if (generationEngine === "gemini") {
+                                    setGeminiKey(val);
+                                    localStorage.setItem("gemini_key_override", val);
+                                  } else if (generationEngine === "openai") {
+                                    setOpenaiKey(val);
+                                    localStorage.setItem("openai_key_override", val);
+                                  } else if (generationEngine === "perplexity") {
+                                    setPerplexityKey(val);
+                                    localStorage.setItem("pplx_key_override", val);
+                                  }
+                                }}
+                                className="block w-full px-2.5 py-2 bg-slate-950/80 border border-white/10 hover:border-gold-custom/30 rounded-lg text-gray-200 placeholder-gray-600 focus:outline-none focus:ring-1 focus:ring-gold-custom text-[11px] font-mono transition-all"
+                              />
+                            </div>
                           </div>
                         )}
 
