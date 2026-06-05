@@ -130,7 +130,7 @@ export default function AuditWizard() {
   const [perplexityKey, setPerplexityKey] = useState("");
   const [openaiKey, setOpenaiKey] = useState("");
   const [geminiKey, setGeminiKey] = useState("");
-  const [generationEngine, setGenerationEngine] = useState<string>("gemini");
+  const [generationEngine, setGenerationEngine] = useState<string>("openai");
 
   // Step 2 AI Preview Modal states
   const [previewQuestion, setPreviewQuestion] = useState<any | null>(null);
