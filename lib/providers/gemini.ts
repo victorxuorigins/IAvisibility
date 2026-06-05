@@ -47,9 +47,14 @@ export class GeminiSearchProvider implements CitationProvider {
       const sources = chunks
         .map((c: any) => {
           if (c.web) {
+            // Gemini 2.5 returns redirect URIs - use title as actual domain URL
+            const title = c.web.title || "";
+            const actualUrl = title && !title.includes(" ")
+              ? `https://${title}`
+              : c.web.uri;
             return {
-              url: c.web.uri,
-              title: c.web.title || c.web.uri,
+              url: actualUrl,
+              title: title || c.web.uri,
             };
           }
           return null;
