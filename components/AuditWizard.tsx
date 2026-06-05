@@ -1296,10 +1296,8 @@ export default function AuditWizard() {
     ? null
     : {
         ...reportData,
-        metrics: selectedEngine === "all"
-          ? reportData.metrics
-          : calculateDashboardMetrics(
-              { run: reportData.run, responses: originalResponses.filter((r: any) => r.provider === selectedEngine) },
+        metrics: calculateDashboardMetrics(
+              { run: reportData.run, responses: selectedEngine === "all" ? originalResponses : originalResponses.filter((r: any) => r.provider === selectedEngine) },
               projectForm.domain,
               projectForm.competitors ? projectForm.competitors.split(",").map((c: any) => c.trim()).filter((c: any) => c.length > 0) : []
             )
