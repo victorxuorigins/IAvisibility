@@ -12,6 +12,9 @@ export class GeminiSearchProvider implements CitationProvider {
         throw new Error("Gemini API key is missing");
       }
 
+      // Delay to avoid free tier rate limiting (15 RPM)
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
       const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${this.apiKey}`, {
         method: "POST",
         headers: {
@@ -60,6 +63,7 @@ export class GeminiSearchProvider implements CitationProvider {
         raw: data,
       };
     } catch (err) {
+      console.error("Gemini provider error:", String(err));
       return {
         answer: "",
         citations: [],
