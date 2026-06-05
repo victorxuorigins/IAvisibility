@@ -1297,7 +1297,22 @@ export default function AuditWizard() {
     : {
         ...reportData,
         metrics: calculateDashboardMetrics(
-              { run: reportData.run, responses: selectedEngine === "all" ? originalResponses : originalResponses.filter((r: any) => r.provider === selectedEngine) },
+              { run: reportData.run, responses: selectedEngine === "all"
+                ? Object.values(originalResponses.reduce((acc: any, resp: any) => {
+                    if (!acc[resp.question_id]) {
+                      acc[resp.question_id] = { ...resp, citations: [...resp.citations] };
+                    } else {
+                      const existingDomains = new Set(acc[resp.question_id].citations.map((c: any) => c.domain));
+                      resp.citations.forEach((c: any) => {
+                        if (!existingDomains.has(c.domain)) {
+                          acc[resp.question_id].citations.push(c);
+                          existingDomains.add(c.domain);
+                        }
+                      });
+                    }
+                    return acc;
+                  }, {}))
+                : originalResponses.filter((r: any) => r.provider === selectedEngine) },
               projectForm.domain,
               projectForm.competitors ? projectForm.competitors.split(",").map((c: any) => c.trim()).filter((c: any) => c.length > 0) : []
             )
