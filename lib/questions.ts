@@ -104,7 +104,8 @@ export async function generateQuestions(
       );
       if (response.ok) {
         const data = await response.json();
-        const jsonText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+        let jsonText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+        if (jsonText.includes("```")) jsonText = jsonText.replace(/```json/g, "").replace(/```/g, "");
         const parsed = JSON.parse(jsonText.trim());
         if (Array.isArray(parsed.questions) && parsed.questions.length > 0) {
           return parsed.questions.map((q: string) => ({ text: q.trim(), source: "generated" as const }));
@@ -149,6 +150,7 @@ export async function generateQuestions(
       if (res.ok) {
         const data = await res.json();
         let jsonText = data.choices?.[0]?.message?.content ?? "";
+        if (jsonText.includes("```")) jsonText = jsonText.replace(/```json/g, "").replace(/```/g, "");
         if (jsonText.includes("```")) jsonText = jsonText.replace(/```json/g, "").replace(/```/g, "");
         const parsed = JSON.parse(jsonText.trim());
         if (Array.isArray(parsed.questions) && parsed.questions.length > 0) {
