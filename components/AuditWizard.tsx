@@ -1292,31 +1292,64 @@ export default function AuditWizard() {
   const uniqueProviders = Array.from(new Set(originalResponses.map((r: any) => r.provider).filter(Boolean))) as string[];
 
   // Dynamically calculate metrics for rendering Step 5 panels
+  const parsedCompetitors = projectForm.competitors ? projectForm.competitors.split(",").map((c: any) => c.trim()).filter((c: any) => c.length > 0) : [];
+
   const activeReportData = !reportData
     ? null
-    : {
-        ...reportData,
-        metrics: calculateDashboardMetrics(
-              { run: reportData.run, responses: selectedEngine === "all"
-                ? Object.values(originalResponses.reduce((acc: any, resp: any) => {
-                    if (!acc[resp.question_id]) {
-                      acc[resp.question_id] = { ...resp, citations: [...resp.citations] };
-                    } else {
-                      const existingDomains = new Set(acc[resp.question_id].citations.map((c: any) => c.domain));
-                      resp.citations.forEach((c: any) => {
-                        if (!existingDomains.has(c.domain)) {
-                          acc[resp.question_id].citations.push(c);
-                          existingDomains.add(c.domain);
-                        }
-                      });
-                    }
-                    return acc;
-                  }, {}))
-                : originalResponses.filter((r: any) => r.provider === selectedEngine) },
+    : (() => {
+        if (selectedEngine !== "all") {
+          return {
+            ...reportData,
+            metrics: calculateDashboardMetrics(
+              { run: reportData.run, responses: originalResponses.filter((r: any) => r.provider === selectedEngine) },
               projectForm.domain,
-              projectForm.competitors ? projectForm.competitors.split(",").map((c: any) => c.trim()).filter((c: any) => c.length > 0) : []
+              parsedCompetitors
             )
-      };
+          };
+        }
+
+        // ALL view: dedupe citations by question for the per-query table
+        const dedupedResponses = Object.values(originalResponses.reduce((acc: any, resp: any) => {
+          if (!acc[resp.question_id]) {
+            acc[resp.question_id] = { ...resp, citations: [...resp.citations] };
+          } else {
+            const existingDomains = new Set(acc[resp.question_id].citations.map((c: any) => c.domain));
+            resp.citations.forEach((c: any) => {
+              if (!existingDomains.has(c.domain)) {
+                acc[resp.question_id].citations.push(c);
+                existingDomains.add(c.domain);
+              }
+            });
+          }
+          return acc;
+        }, {}));
+
+        const allMetrics = calculateDashboardMetrics(
+          { run: reportData.run, responses: dedupedResponses },
+          projectForm.domain,
+          parsedCompetitors
+        );
+
+        // Accurate cross-engine SOV = average of each engine's individual SOV
+        const enginesList = Array.from(new Set(originalResponses.map((r: any) => r.provider).filter(Boolean)));
+        const perEngineSov = enginesList.map((eng) => {
+          const engResponses = originalResponses.filter((r: any) => r.provider === eng);
+          const total = engResponses.length;
+          if (total === 0) return 0;
+          const present = engResponses.filter((r: any) => (r.citations || []).some((c: any) => c.classification === "target")).length;
+          return (present / total) * 100;
+        });
+        const avgSov = perEngineSov.length > 0 ? Math.round(perEngineSov.reduce((a, b) => a + b, 0) / perEngineSov.length) : 0;
+
+        allMetrics.shareOfVoice = avgSov;
+        allMetrics.newKpis = {
+          ...allMetrics.newKpis,
+          visibilityScore: avgSov,
+          opportunityScore: Math.max(0, 100 - avgSov),
+        };
+
+        return { ...reportData, metrics: allMetrics };
+      })();
 
   if (!mounted) {
     return (
