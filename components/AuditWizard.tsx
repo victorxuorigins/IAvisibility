@@ -4200,9 +4200,9 @@ export default function AuditWizard() {
                             : "Key buyer intents where your brand is missing but your competitors are cited."}
                         </p>
 
-                        {reportData.metrics.opportunityAnalysis.length > 0 ? (
+                        {activeReportData?.metrics.opportunityAnalysis.length > 0 ? (
                           <div className="space-y-3.5">
-                            {reportData.metrics.opportunityAnalysis.map((opp: any, idx: number) => (
+                            {activeReportData?.metrics.opportunityAnalysis.map((opp: any, idx: number) => (
                               <div key={idx} className="p-4 border border-red-500/10 bg-red-500/[0.02] hover:border-red-500/20 rounded-xl space-y-3 transition-all">
                                 <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-2 border-b border-white/5 pb-2">
                                   <span className="text-sm font-extrabold text-white">
@@ -4276,7 +4276,7 @@ export default function AuditWizard() {
                                 {lang === "es" ? "Prioridad Alta - Mejoras Directas de Visibilidad" : "High Priority - Direct Visibility Uplift"}
                               </span>
                               <span className="text-xs font-bold uppercase px-1.5 py-0.5 rounded border border-red-500/20 bg-red-500/10 text-red-300 font-mono">
-                                {reportData.metrics.actionPlan.filter((a: any) => a.priority === "High").length} {lang === "es" ? "Recomendaciones" : "Recommendations"}
+                                {activeReportData?.metrics.actionPlan.filter((a: any) => a.priority === "High").length} {lang === "es" ? "Recomendaciones" : "Recommendations"}
                               </span>
                             </div>
                             {openPriorities.High ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
@@ -4284,7 +4284,7 @@ export default function AuditWizard() {
                           
                           {openPriorities.High && (
                             <div className="p-5 space-y-3 bg-slate-950/[0.05]">
-                              {reportData.metrics.actionPlan.filter((a: any) => a.priority === "High").map((act: any, idx: number) => (
+                              {activeReportData?.metrics.actionPlan.filter((a: any) => a.priority === "High").map((act: any, idx: number) => (
                                 <div key={idx} className="flex gap-3 p-3 border border-red-500/10 bg-red-500/[0.01] rounded-xl hover:border-red-500/20 transition-all text-sm">
                                   <div className="p-1 rounded bg-red-500/10 text-red-400 h-fit">
                                     <Zap className="w-3.5 h-3.5" />
@@ -4311,7 +4311,7 @@ export default function AuditWizard() {
                                 {lang === "es" ? "Prioridad Media - Construcción de Autoridad" : "Medium Priority - Authority Building"}
                               </span>
                               <span className="text-xs font-bold uppercase px-1.5 py-0.5 rounded border border-orange-500/20 bg-orange-500/10 text-orange-300 font-mono">
-                                {reportData.metrics.actionPlan.filter((a: any) => a.priority === "Medium").length} {lang === "es" ? "Recomendaciones" : "Recommendations"}
+                                {activeReportData?.metrics.actionPlan.filter((a: any) => a.priority === "Medium").length} {lang === "es" ? "Recomendaciones" : "Recommendations"}
                               </span>
                             </div>
                             {openPriorities.Medium ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
@@ -4319,7 +4319,7 @@ export default function AuditWizard() {
                           
                           {openPriorities.Medium && (
                             <div className="p-5 space-y-3 bg-slate-955/[0.05]">
-                              {reportData.metrics.actionPlan.filter((a: any) => a.priority === "Medium").map((act: any, idx: number) => (
+                              {activeReportData?.metrics.actionPlan.filter((a: any) => a.priority === "Medium").map((act: any, idx: number) => (
                                 <div key={idx} className="flex gap-3 p-3 border border-orange-500/10 bg-orange-500/[0.01] rounded-xl hover:border-orange-500/20 transition-all text-sm">
                                   <div className="p-1 rounded bg-orange-500/10 text-orange-400 h-fit">
                                     <Layers className="w-3.5 h-3.5" />
@@ -4346,7 +4346,7 @@ export default function AuditWizard() {
                                 {lang === "es" ? "Prioridad Baja - Optimización Técnica" : "Low Priority - Technical Optimization"}
                               </span>
                               <span className="text-xs font-bold uppercase px-1.5 py-0.5 rounded border border-blue-500/20 bg-blue-500/10 text-blue-300 font-mono">
-                                {reportData.metrics.actionPlan.filter((a: any) => a.priority === "Low").length} {lang === "es" ? "Recomendaciones" : "Recommendations"}
+                                {activeReportData?.metrics.actionPlan.filter((a: any) => a.priority === "Low").length} {lang === "es" ? "Recomendaciones" : "Recommendations"}
                               </span>
                             </div>
                             {openPriorities.Low ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
@@ -4354,7 +4354,7 @@ export default function AuditWizard() {
                           
                           {openPriorities.Low && (
                             <div className="p-5 space-y-3 bg-slate-955/[0.05]">
-                              {reportData.metrics.actionPlan.filter((a: any) => a.priority === "Low").map((act: any, idx: number) => (
+                              {activeReportData?.metrics.actionPlan.filter((a: any) => a.priority === "Low").map((act: any, idx: number) => (
                                 <div key={idx} className="flex gap-3 p-3 border border-blue-500/10 bg-blue-500/[0.01] rounded-xl hover:border-blue-500/20 transition-all text-sm">
                                   <div className="p-1 rounded bg-blue-500/10 text-blue-400 h-fit">
                                     <SettingsIcon className="w-3.5 h-3.5" />
