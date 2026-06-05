@@ -578,7 +578,7 @@ function groupRuns(runs: any[]): any[] {
     const matchGroupIdx = grouped.findIndex(g => {
       if (g.project_id !== run.project_id) return false;
       const gTime = new Date(g.created_at).getTime();
-      return Math.abs(gTime - runTime) <= 2 * 60 * 1000; // 2 minutes
+      return Math.abs(gTime - runTime) <= 5 * 60 * 1000; // 5 minutes
     });
     
     if (matchGroupIdx !== -1) {
