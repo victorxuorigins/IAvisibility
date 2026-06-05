@@ -2305,16 +2305,16 @@ export default function AuditWizard() {
                         </div>
 
                         {generationEngine !== "mock" && (
-                          ((generationEngine === "gemini" && !geminiKey.trim()) ||
-                           (generationEngine === "openai" && !openaiKey.trim()) ||
-                           (generationEngine === "perplexity" && !perplexityKey.trim()))
-                        ) && (
                           <div className="text-[10px] text-amber-500 bg-amber-500/10 border border-amber-500/20 p-2.5 rounded-lg leading-relaxed font-sans space-y-2.5">
-                            <div>
-                              {lang === "es"
-                                ? `Nota: No has configurado una API Key para ${generationEngine.toUpperCase()} en tus ajustes. Se usará la clave del servidor o las plantillas por defecto.`
-                                : `Note: You haven't set a custom API Key for ${generationEngine.toUpperCase()} in settings. Server defaults or fallback templates will be used.`}
-                            </div>
+                            {((generationEngine === "gemini" && !geminiKey.trim()) ||
+                             (generationEngine === "openai" && !openaiKey.trim()) ||
+                             (generationEngine === "perplexity" && !perplexityKey.trim())) && (
+                              <div>
+                                {lang === "es"
+                                  ? `Nota: No has configurado una API Key para ${generationEngine.toUpperCase()} en tus ajustes. Se usará la clave del servidor o las plantillas por defecto.`
+                                  : `Note: You haven't set a custom API Key for ${generationEngine.toUpperCase()} in settings. Server defaults or fallback templates will be used.`}
+                              </div>
+                            )}
                             <div className="space-y-1">
                               <label className="block text-[9px] font-bold text-gray-400 uppercase tracking-wider font-mono">
                                 {lang === "es" ? `Ingresar Clave para ${generationEngine.toUpperCase()} (Override)` : `Enter API Key for ${generationEngine.toUpperCase()} (Override)`}
