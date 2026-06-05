@@ -61,7 +61,7 @@ export default function AuditWizard() {
   const [mounted, setMounted] = useState(false);
 
   // Language State: "es" | "en"
-  const [lang, setLang] = useState<"es" | "en">("es");
+  const [lang, setLang] = useState<"es" | "en">("en");
 
   // Navigation Sidebar State: "new-audit" | "projects" | "history" | "settings" | "help"
   const [activeTab, setActiveTab] = useState<"new-audit" | "projects" | "history" | "settings" | "help">("new-audit");
@@ -150,7 +150,8 @@ export default function AuditWizard() {
       setPerplexityKey(localStorage.getItem("pplx_key_override") || "");
       setOpenaiKey(localStorage.getItem("openai_key_override") || "");
       setGeminiKey(localStorage.getItem("gemini_key_override") || "");
-      setLang((localStorage.getItem("preferred_lang") as "es" | "en") || "es");
+      localStorage.removeItem("preferred_lang");
+      setLang("en");
       loadProjects();
       loadHistory();
       
@@ -3953,7 +3954,7 @@ export default function AuditWizard() {
                               const compCount = item.citations?.filter((c: any) => c.classification === "competitor").length || 0;
 
                               return (
-                                <tr key={item.questionId || idx} className="hover:bg-white/5 transition-colors">
+                                <tr key={`${item.questionId || idx}_${idx}`} className="hover:bg-white/5 transition-colors">
                                   <td className="py-3 font-mono text-gray-500">{idx + 1}</td>
                                   <td className="py-3 max-w-sm sm:max-w-md truncate font-bold text-gray-200 text-sm" title={item.questionText}>
                                     {item.questionText}

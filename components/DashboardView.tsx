@@ -61,7 +61,7 @@ interface DashboardViewProps {
 export default function DashboardView({ project, run, metrics, recommendations }: DashboardViewProps) {
   const [mounted, setMounted] = useState(false);
   const [openQuestionId, setOpenQuestionId] = useState<string | null>(null);
-  const [lang, setLang] = useState<"es" | "en">("es");
+  const [lang, setLang] = useState<"es" | "en">("en");
   const [activeModal, setActiveModal] = useState<string | null>(null);
   
   const [selectedEngine, setSelectedEngine] = useState<string>("all");
@@ -103,7 +103,8 @@ export default function DashboardView({ project, run, metrics, recommendations }
   useEffect(() => {
     setMounted(true);
     if (typeof window !== "undefined") {
-      setLang((localStorage.getItem("preferred_lang") as "es" | "en") || "es");
+      localStorage.removeItem("preferred_lang");
+      setLang("en");
     }
   }, []);
 
