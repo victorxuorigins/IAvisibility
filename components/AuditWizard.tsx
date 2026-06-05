@@ -314,6 +314,16 @@ export default function AuditWizard() {
             setStep(3);
           }
         }
+      } else {
+        setProjectId(null);
+        localStorage.removeItem("current_project_id");
+        setStep(1);
+        triggerNotification(
+          lang === "es" 
+            ? "El proyecto activo no se encontró en la base de datos local y ha sido restablecido." 
+            : "The active project was not found in the local database and has been reset.",
+          "error"
+        );
       }
     } catch (e) {
       console.error("Error restoring project session:", e);
