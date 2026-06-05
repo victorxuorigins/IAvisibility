@@ -61,7 +61,7 @@ interface DashboardViewProps {
 export default function DashboardView({ project, run, metrics, recommendations }: DashboardViewProps) {
   const [mounted, setMounted] = useState(false);
   const [openQuestionId, setOpenQuestionId] = useState<string | null>(null);
-  const [lang, setLang] = useState<"es" | "en">("en");
+  const [lang, setLang] = useState<"es" | "en">("es");
   const [activeModal, setActiveModal] = useState<string | null>(null);
   
   const [selectedEngine, setSelectedEngine] = useState<string>("all");
@@ -103,7 +103,7 @@ export default function DashboardView({ project, run, metrics, recommendations }
   useEffect(() => {
     setMounted(true);
     if (typeof window !== "undefined") {
-      setLang((localStorage.getItem("preferred_lang") as "es" | "en") || "en");
+      setLang((localStorage.getItem("preferred_lang") as "es" | "en") || "es");
     }
   }, []);
 
@@ -178,18 +178,7 @@ export default function DashboardView({ project, run, metrics, recommendations }
 
         {/* Action Buttons */}
         <div className="flex items-center gap-3 shrink-0">
-          {/* Language Selector Toggle */}
-          <button
-            onClick={() => {
-              const nextLang = lang === "es" ? "en" : "es";
-              setLang(nextLang);
-              localStorage.setItem("preferred_lang", nextLang);
-            }}
-            className="text-[10px] font-mono font-bold tracking-widest text-violet-400 hover:text-white bg-violet-500/10 hover:bg-violet-500/25 px-2.5 py-1.5 rounded-lg border border-violet-500/25 transition-all cursor-pointer"
-            title="Switch Language / Cambiar Idioma"
-          >
-            {lang === "es" ? "EN" : "ES"}
-          </button>
+          {/* Language Selector Toggle Removed */}
 
           <Link
             href={`/project/${project.id}`}
@@ -224,7 +213,10 @@ export default function DashboardView({ project, run, metrics, recommendations }
                   : "text-gray-405 hover:text-white bg-transparent"
               }`}
             >
-              {prov.toLowerCase() === "perplexity" ? "Perplexity" : "Mock Data"}
+              {prov.toLowerCase() === "perplexity" ? "Perplexity" :
+               prov.toLowerCase() === "openai" ? "OpenAI Search" :
+               prov.toLowerCase() === "gemini" ? "Google Gemini" :
+               "Datos Simulados (Mock)"}
             </button>
           ))}
         </div>

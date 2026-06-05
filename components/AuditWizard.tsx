@@ -61,7 +61,7 @@ export default function AuditWizard() {
   const [mounted, setMounted] = useState(false);
 
   // Language State: "es" | "en"
-  const [lang, setLang] = useState<"es" | "en">("en");
+  const [lang, setLang] = useState<"es" | "en">("es");
 
   // Navigation Sidebar State: "new-audit" | "projects" | "history" | "settings" | "help"
   const [activeTab, setActiveTab] = useState<"new-audit" | "projects" | "history" | "settings" | "help">("new-audit");
@@ -150,7 +150,7 @@ export default function AuditWizard() {
       setPerplexityKey(localStorage.getItem("pplx_key_override") || "");
       setOpenaiKey(localStorage.getItem("openai_key_override") || "");
       setGeminiKey(localStorage.getItem("gemini_key_override") || "");
-      setLang((localStorage.getItem("preferred_lang") as "es" | "en") || "en");
+      setLang((localStorage.getItem("preferred_lang") as "es" | "en") || "es");
       loadProjects();
       loadHistory();
       
@@ -1402,18 +1402,7 @@ export default function AuditWizard() {
             <span>{t.tabHelp}</span>
           </button>
           
-          {/* Language Selector Toggle */}
-          <button
-            onClick={() => {
-              const nextLang = lang === "es" ? "en" : "es";
-              setLang(nextLang);
-              localStorage.setItem("preferred_lang", nextLang);
-            }}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-bold tracking-wider uppercase text-gold-custom hover:text-white bg-gold-custom/10 hover:bg-gold-custom/20 border border-gold-custom/20 transition-all cursor-pointer"
-          >
-            <Globe className="w-4 h-4" />
-            <span>{lang === "es" ? "English (EN)" : "Español (ES)"}</span>
-          </button>
+          {/* Language Selector Toggle Removed */}
 
           <div className="bg-black/30 border border-white/5 p-3 rounded-lg text-[10px] font-mono space-y-1 text-gray-500">
             <span className="block text-gray-400 font-bold uppercase tracking-wider mb-1">{t.connectionLocal}</span>
@@ -1447,18 +1436,7 @@ export default function AuditWizard() {
             </div>
             
             <div className="flex items-center gap-3">
-              {/* Language Selector Toggle */}
-              <button
-                onClick={() => {
-                  const nextLang = lang === "es" ? "en" : "es";
-                  setLang(nextLang);
-                  localStorage.setItem("preferred_lang", nextLang);
-                }}
-                className="text-[10px] font-mono font-bold tracking-widest text-gold-custom hover:text-white bg-gold-custom/10 hover:bg-gold-custom/25 px-2.5 py-1.5 rounded-lg border border-gold-custom/25 transition-all cursor-pointer"
-                title="Switch Language / Cambiar Idioma"
-              >
-                {lang === "es" ? "EN" : "ES"}
-              </button>
+              {/* Language Selector Toggle Removed */}
 
               <button
                 onClick={() => {
@@ -3458,7 +3436,10 @@ export default function AuditWizard() {
                               : "text-gray-405 hover:text-white bg-transparent"
                           }`}
                         >
-                          {prov.toLowerCase() === "perplexity" ? "Perplexity" : "Mock Data"}
+                          {prov.toLowerCase() === "perplexity" ? "Perplexity" :
+                           prov.toLowerCase() === "openai" ? "OpenAI Search" :
+                           prov.toLowerCase() === "gemini" ? "Google Gemini" :
+                           "Datos Simulados (Mock)"}
                         </button>
                       ))}
                     </div>
