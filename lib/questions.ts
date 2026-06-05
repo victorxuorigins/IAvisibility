@@ -98,7 +98,6 @@ export async function generateQuestions(
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             contents: [{ parts: [{ text: prompt }] }],
-            generationConfig: { responseMimeType: "application/json" },
           }),
           signal: AbortSignal.timeout(10000),
         }
