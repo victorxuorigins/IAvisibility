@@ -130,7 +130,7 @@ function cleanDomain(d: string): string {
 /**
  * Classifies a domain into the 7 requested categories.
  */
-export function classifyDomain(
+function classifyDomainForDisplay(
   domain: string,
   targetDomain: string,
   competitorDomains: string[]
@@ -139,51 +139,37 @@ export function classifyDomain(
   const cleanTarget = cleanDomain(targetDomain);
   const cleanComps = competitorDomains.map(cleanDomain);
 
-  if (cleanD === cleanTarget || cleanTarget.includes(cleanD) || cleanD.includes(cleanTarget)) {
-    return "Company Website";
-  }
-  if (cleanComps.some(comp => cleanD === comp || comp.includes(cleanD) || cleanD.includes(comp))) {
-    return "Competitor Website";
-  }
+  const isMatch = (d: string, t: string) => d === t || d.endsWith("." + t);
 
-  // Review Sites
+  if (isMatch(cleanD, cleanTarget)) return "Company Website";
+  if (cleanComps.some(comp => comp && isMatch(cleanD, comp))) return "Competitor Website";
+
   const reviewSites = [
-    "g2.com", "capterra.com", "trustradius.com", "softwareadvice.com", 
+    "g2.com", "capterra.com", "trustradius.com", "softwareadvice.com",
     "getapp.com", "trustpilot.com", "tripadvisor.com", "yelp.com", "clutch.co"
   ];
-  if (reviewSites.some(site => cleanD === site || cleanD.endsWith("." + site))) {
-    return "Review Site";
-  }
+  if (reviewSites.some(site => isMatch(cleanD, site))) return "Review Site";
 
-  // Community / Forum
   const communities = [
-    "reddit.com", "quora.com", "stackoverflow.com", "github.com", 
-    "news.ycombinator.com", "medium.com", "facebook.com", "twitter.com", 
+    "reddit.com", "quora.com", "stackoverflow.com", "github.com",
+    "news.ycombinator.com", "medium.com", "facebook.com", "twitter.com",
     "linkedin.com", "instagram.com", "youtube.com"
   ];
-  if (communities.some(site => cleanD === site || cleanD.endsWith("." + site))) {
-    return "Community / Forum";
-  }
+  if (communities.some(site => isMatch(cleanD, site))) return "Community / Forum";
 
-  // Industry Publications
   const publications = [
-    "forbes.com", "bloomberg.com", "techcrunch.com", "wsj.com", 
-    "nytimes.com", "economist.com", "reuters.com", "industryweek.com", 
-    "machinedesign.com", "gartner.com", "idc.com", "forrester.com", 
+    "forbes.com", "bloomberg.com", "techcrunch.com", "wsj.com",
+    "nytimes.com", "economist.com", "reuters.com", "industryweek.com",
+    "machinedesign.com", "gartner.com", "idc.com", "forrester.com",
     "hbr.org", "wired.com", "zdnet.com", "venturebeat.com"
   ];
-  if (publications.some(site => cleanD === site || cleanD.endsWith("." + site))) {
-    return "Industry Publication";
-  }
+  if (publications.some(site => isMatch(cleanD, site))) return "Industry Publication";
 
-  // Directories
   const directories = [
-    "yellowpages.com", "crunchbase.com", "zoominfo.com", "thomasnet.com", 
-    "dnb.com", "manta.com", "directorio.com"
+    "yellowpages.com", "crunchbase.com", "zoominfo.com", "thomasnet.com",
+    "dnb.com", "manta.com"
   ];
-  if (directories.some(site => cleanD === site || cleanD.endsWith("." + site))) {
-    return "Directory";
-  }
+  if (directories.some(site => isMatch(cleanD, site))) return "Directory";
 
   return "Unknown";
 }
@@ -368,7 +354,7 @@ export function calculateDashboardMetrics(
       q.citations.forEach((cit) => {
         const cleanCitDomain = cleanDomain(cit.domain);
         const cleanCompDomain = cleanDomain(comp.domain);
-        const classification = classifyDomain(cit.domain, targetDomain, allCompetitorDomains);
+        const classification = classifyDomainForDisplay(cit.domain, targetDomain, allCompetitorDomains);
 
         const isDirect = cleanCitDomain === cleanCompDomain;
         const isThirdParty = isThirdPartyAboutBrand(cit, comp.domain);
@@ -441,7 +427,7 @@ export function calculateDashboardMetrics(
     (resp.citations || []).forEach((c) => {
       if (c.domain) {
         const cleanD = cleanDomain(c.domain);
-        const classification = classifyDomain(c.domain, targetDomain, allCompetitorDomains);
+        const classification = classifyDomainForDisplay(c.domain, targetDomain, allCompetitorDomains);
         authorityCounts[classification]++;
 
         if (!domainDetailedCounts[cleanD]) {
@@ -495,7 +481,7 @@ export function calculateDashboardMetrics(
       q.citations.forEach((cit) => {
         const cleanCitDomain = cleanDomain(cit.domain);
         const cleanCompDomain = cleanDomain(comp.domain);
-        const classification = classifyDomain(cit.domain, targetDomain, allCompetitorDomains);
+        const classification = classifyDomainForDisplay(cit.domain, targetDomain, allCompetitorDomains);
 
         const isDirect = cleanCitDomain === cleanCompDomain;
         const isThirdParty = isThirdPartyAboutBrand(cit, comp.domain);
@@ -703,7 +689,7 @@ export function calculateDashboardMetrics(
   let authorityScore = 0;
   if (targetTotalCits > 0) {
     authorityScore = Math.round(
-      Math.min(100, (targetReviewCits * 30 + targetPubCits * 25 + (targetThirdPartyCits - targetReviewCits - targetPubCits) * 15 + (targetTotalCits - targetThirdPartyCits) * 10))
+      Math.max(0, Math.min(100, (targetReviewCits * 30 + targetPubCits * 25 + (targetThirdPartyCits - targetReviewCits - targetPubCits) * 15 + (targetTotalCits - targetThirdPartyCits) * 10)))
     );
   }
 
