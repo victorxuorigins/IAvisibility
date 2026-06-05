@@ -1201,13 +1201,19 @@ export default function AuditWizard() {
     const domain = projectForm.domain || "tudominio.com";
     const industry = projectForm.industry || "B2B";
     
-    // If this engine was the one used in the run, return the real result!
+    // Compute actual per-engine SOV from stored audit responses
+    const engResponses = originalResponses.filter((r: any) => r.provider === engine);
+    const engTotal = engResponses.length;
+    const engPresent = engResponses.filter((r: any) => (r.citations || []).some((c: any) => c.classification === "target")).length;
+    const perEngineSov = engTotal > 0 ? Math.round((engPresent / engTotal) * 100) : 0;
+
+    // If this engine was used in the run, return the real result
     if (reportData?.metrics?.questionsDetail) {
       const matchingQ = reportData.metrics.questionsDetail.find((q: any) => q.questionText === questionText && q.provider === engine);
       if (matchingQ && matchingQ.answer) {
         return {
           answer: matchingQ.answer,
-          sov: reportData.metrics.shareOfVoice,
+          sov: perEngineSov,
           citations: matchingQ.citations?.map((c: any) => c.domain) || [],
           advice: lang === "es" 
             ? "Métricas y citas reales extraídas de la ejecución en vivo." 
@@ -4439,7 +4445,7 @@ export default function AuditWizard() {
                             onChange={(e) => setComparisonQuestionIdx(Number(e.target.value))}
                             className="px-3.5 py-2 bg-slate-955 border border-white/10 rounded-lg text-xs text-gray-200 focus:outline-none focus:ring-1 focus:ring-gold-custom font-mono cursor-pointer max-w-full sm:max-w-xs"
                           >
-                            {reportData.metrics.questionsDetail.map((q: any, idx: number) => (
+                            {Array.from(new Map(reportData.metrics.questionsDetail.map((q: any) => [q.questionText, q])).values()).map((q: any, idx: number) => (
                               <option key={idx} value={idx}>
                                 {idx + 1}. {q.questionText}
                               </option>
@@ -4454,7 +4460,7 @@ export default function AuditWizard() {
                           const qText = reportData.metrics.questionsDetail[comparisonQuestionIdx]?.questionText || "";
                           const qDefault = reportData.metrics.questionsDetail[comparisonQuestionIdx]?.answer || "";
                           const engineData = getEngineSimulatedData(eng, qText, qDefault);
-                          const isActualRunEngine = reportData?.run?.provider?.toLowerCase().includes(eng);
+                          const isActualRunEngine = uniqueProviders.map((p: string) => p.toLowerCase()).includes(eng);
                           
                           return (
                             <div 
