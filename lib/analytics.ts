@@ -688,9 +688,15 @@ export function calculateDashboardMetrics(
 
   let authorityScore = 0;
   if (targetTotalCits > 0) {
-    authorityScore = Math.round(
-      Math.max(0, Math.min(100, (targetReviewCits * 30 + targetPubCits * 25 + (targetThirdPartyCits - targetReviewCits - targetPubCits) * 15 + (targetTotalCits - targetThirdPartyCits) * 10)))
-    );
+    // Each category is capped independently so the total cannot inflate past 100.
+    // Max breakdown: reviews 30 + pubs 25 + other third-party 25 + direct 20 = 100
+    const reviewPts       = Math.min(30, targetReviewCits * 10);
+    const pubPts          = Math.min(25, targetPubCits * 8);
+    const otherThirdParty = Math.max(0, targetThirdPartyCits - targetReviewCits - targetPubCits);
+    const otherPts        = Math.min(25, otherThirdParty * 5);
+    const directCits      = Math.max(0, targetTotalCits - targetThirdPartyCits);
+    const directPts       = Math.min(20, directCits * 4);
+    authorityScore = Math.round(reviewPts + pubPts + otherPts + directPts);
   }
 
   // 3. Competitor Dominance Score
