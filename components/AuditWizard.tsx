@@ -2309,10 +2309,19 @@ export default function AuditWizard() {
                             {((generationEngine === "gemini" && !geminiKey.trim()) ||
                              (generationEngine === "openai" && !openaiKey.trim()) ||
                              (generationEngine === "perplexity" && !perplexityKey.trim())) && (
-                              <div>
-                                {lang === "es"
-                                  ? `Nota: No has configurado una API Key para ${generationEngine.toUpperCase()} en tus ajustes. Se usará la clave del servidor o las plantillas por defecto.`
-                                  : `Note: You haven't set a custom API Key for ${generationEngine.toUpperCase()} in settings. Server defaults or fallback templates will be used.`}
+                              <div className="space-y-1.5">
+                                <div>
+                                  {lang === "es"
+                                    ? `Nota: No has configurado una API Key para ${generationEngine.toUpperCase()} en tus ajustes. Se usará la clave del servidor o las plantillas por defecto.`
+                                    : `Note: You haven't set a custom API Key for ${generationEngine.toUpperCase()} in settings. Server defaults or fallback templates will be used.`}
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => setGenerationEngine("mock")}
+                                  className="text-[9px] font-bold text-amber-400 hover:underline block cursor-pointer transition-all"
+                                >
+                                  {lang === "es" ? "→ Usar Simulador Local Gratis" : "→ Use Free Local Simulator"}
+                                </button>
                               </div>
                             )}
                             <div className="space-y-1">
@@ -2344,9 +2353,29 @@ export default function AuditWizard() {
                                     localStorage.setItem("pplx_key_override", val);
                                   }
                                 }}
-                                className="block w-full px-2.5 py-2 bg-slate-950/80 border border-white/10 hover:border-gold-custom/30 rounded-lg text-gray-200 placeholder-gray-600 focus:outline-none focus:ring-1 focus:ring-gold-custom text-[11px] font-mono transition-all"
+                                className="block w-full px-2.5 py-2 bg-slate-955/80 border border-white/10 hover:border-gold-custom/30 rounded-lg text-gray-200 placeholder-gray-655 focus:outline-none focus:ring-1 focus:ring-gold-custom text-[11px] font-mono transition-all"
                               />
                             </div>
+                          </div>
+                        )}
+
+                        {generationEngine === "mock" && (
+                          <div className="text-[10px] text-blue-400 bg-blue-500/10 border border-blue-500/20 p-2.5 rounded-lg leading-relaxed font-sans space-y-1.5">
+                            <div className="font-bold">
+                              {lang === "es" ? "✓ MODO SIMULADO ACTIVO" : "✓ SIMULATION MODE ACTIVE"}
+                            </div>
+                            <div>
+                              {lang === "es"
+                                ? "Estás usando plantillas locales gratuitas sin consumo de API Key."
+                                : "You are using free local templates without API Key consumption."}
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => setGenerationEngine("gemini")}
+                              className="text-[9px] font-bold text-gold-custom hover:underline block cursor-pointer transition-all"
+                            >
+                              {lang === "es" ? "→ Cambiar a Generación con API Real" : "→ Switch to Real API Generation"}
+                            </button>
                           </div>
                         )}
 
@@ -2793,6 +2822,16 @@ export default function AuditWizard() {
                       {/* API Key Forms */}
                       {selectedProviders.some(p => ["perplexity", "openai", "gemini"].includes(p)) && (
                         <div className="space-y-4">
+                          <div className="text-[11px] text-amber-500 bg-amber-500/10 border border-amber-500/20 p-3.5 rounded-2xl leading-relaxed font-sans flex flex-col gap-2">
+                            <div className="font-bold uppercase tracking-wider text-[10px] text-amber-400">
+                              {lang === "es" ? "💡 Información de API vs Simulador Gratis" : "💡 API vs Free Simulator Info"}
+                            </div>
+                            <div>
+                              {lang === "es"
+                                ? "Has seleccionado uno o más motores de IA reales para la auditoría. Si no cuentas con una API Key propia, puedes dejar su campo vacío. El sistema utilizará de forma automática el simulador local gratuito (Mock) para ese motor y evitará errores."
+                                : "You have selected one or more real AI engines for the audit. If you do not have your own API Key, you can leave its field empty. The system will automatically use the free local simulator (Mock) for that engine and prevent errors."}
+                            </div>
+                          </div>
                           {selectedProviders.includes("perplexity") && (
                             <div className="bg-slate-900/60 backdrop-blur-md border border-white/5 rounded-2xl p-5 space-y-3 shadow-xl relative overflow-hidden">
                               <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gold-custom/25 to-transparent" />
