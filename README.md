@@ -2,6 +2,8 @@
 
 Esta aplicación es una demostración técnica interactiva para auditar el **Share of Voice (SOV)** de una marca en buscadores conversacionales de IA (como Perplexity, Gemini, ChatGPT Search). Permite definir una empresa objetivo, generar preguntas de intención de compra del embudo, consultar un proveedor de IA con búsqueda web, normalizar/clasificar las fuentes citadas, y visualizar oportunidades de contenido para optimización de motores generativos (GEO / Generative Engine Optimization).
 
+- **Demo en Vivo:** [COMPLETAR: URL o "no deployada"]
+
 ---
 
 ## ⚙️ Configuración Avanzada (Red & Motores de IA Reales)
@@ -70,4 +72,24 @@ Si continuáramos el desarrollo hacia un SaaS comercial, priorizaríamos:
    Ponderar las citas según su jerarquía en la respuesta de la IA (por ejemplo, si el enlace aparece en el primer párrafo o como nota al pie).
 2. **Alertas de Caída de Visibilidad (Alerting Engine):**
    Notificar a los especialistas de marketing mediante webhooks o correos electrónicos si el Share of Voice (SOV) disminuye de forma repentina en algún motor clave en la última semana.
+
+---
+
+## 🧪 Pruebas Unitarias
+
+El proyecto cuenta con un conjunto de pruebas unitarias implementadas con **Vitest** para garantizar la integridad de la lógica principal.
+
+### Ejecución de Pruebas
+
+Para correr el set de pruebas unitarias automatizadas:
+
+```bash
+npm run test
+```
+
+Este script ejecuta Vitest en modo de una sola pasada (`vitest run`), verificando:
+1. La **normalización de dominios** (`normalizeDomain`): remoción de esquemas y subdominios `www.`, conversión a minúsculas y descarte de URLs inválidas.
+2. La **deduplicación de dominios** (`normalizeCitations`): limpieza y consolidación de citaciones repetidas por dominio dentro de una misma respuesta de IA.
+3. La **clasificación de dominios** (`classifyDomain`): asignación correcta de categorías (`target`, `competitor`, `review`, `publication` u `other`).
+4. El **cálculo del Share of Voice** (`calculateDashboardMetrics`): cálculo del porcentaje exacto de preguntas donde aparece la marca objetivo basándose en sus citas.
 

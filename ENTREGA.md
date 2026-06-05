@@ -1,5 +1,22 @@
 # Entrega técnica — AI Citation Visibility Dashboard
 
+- **Repositorio de GitHub**: [COMPLETAR: URL del repo]
+- **Demo en vivo**: [COMPLETAR: URL o "no deployada"]
+- **Stack**: Next.js + TypeScript, persistencia local en SQLite
+
+---
+
+## ⚡ Cómo probar la demo en 30 segundos
+
+Para probar el flujo principal del sistema de inmediato sin necesidad de configurar claves API de terceros:
+
+1. **Abrir la aplicación**: Ve al entorno local (usualmente [http://localhost:3000](http://localhost:3000)).
+2. **Cargar empresa**: En el primer paso, completa el formulario con la marca **Atlas Copco** y el dominio `atlascopco.com` (ya cuenta con un autocompletado de prueba). Presiona "Siguiente".
+3. **Ejecutar auditoría**: En el paso de generación y ejecución, haz clic en **"Iniciar Auditoría"** (por defecto corre en **modo Mock/Simulado**, sin consumir claves de API).
+4. **Ver el dashboard**: Deja que se completen las preguntas simuladas y observa los gráficos interactivos del dashboard (Share of Voice, Top Dominios Citados, análisis de competidores y brechas de contenido).
+
+---
+
 Este documento mapea la implementación real del proyecto contra los requisitos del reto de entrevista *"AI Citation Visibility Dashboard"*. Está dividido en tres bloques: lo que se pidió, lo que el sistema ya tiene, y lo que se agregó por encima del mínimo.
 
 ---
@@ -144,3 +161,11 @@ No hay claves en el código; todas se leen de variables de entorno.
 - Automatizar las corridas periódicas (el histórico ya existe; falta programarlas) y alertar cuando cae la visibilidad.
 - Distinguir **mención** (la marca nombrada en el texto) de **cita** (el dominio como fuente).
 - Exportación de informes a PDF.
+
+---
+
+## Timebox y decisiones de alcance
+
+Para este proyecto se invirtieron aproximadamente **[COMPLETAR: horas aproximadas] horas** en total, excediendo el rango sugerido de 4–8 horas debido a la decisión de implementar una solución robusta y lista para producción en lugar de un MVP básico.
+
+El foco principal del esfuerzo se destinó a asegurar el núcleo del reto (el correcto funcionamiento de los 5 módulos obligatorios y el desarrollo preciso de las 4 vistas del panel). Con el objetivo de presentar una entrega destacada y robusta, se incorporaron funcionalidades extra (como la integración con tres motores reales de IA con búsqueda web, el historial persistente de auditorías, el gráfico de evolución del Share of Voice, la traducción bilingüe, la detección de competidores no declarados en el radar, la previsualización individual de consultas y el borrado de proyectos en cascada). Sin embargo, para no dilatar el desarrollo indefinidamente, estos agregados de valor se sumaron con un alcance acotado y controlado (tradeoffs de timebox), dejando implementaciones más complejas (como cron-jobs para corridas automáticas, ponderación de la cita por posición dentro del texto, o crawlers dedicados para evadir restricciones de red de terceros) catalogadas para futuras iteraciones en el roadmap.
