@@ -751,29 +751,33 @@ export default function AuditWizard() {
       setQuestions(fallbacks);
       triggerNotification(
         lang === "es" 
-          ? "Se cargaron preguntas de plantilla debido a un problema con la IA" 
-          : "Template questions loaded due to an issue with AI", 
-        "info"
+          ? `Error al generar preguntas con IA (${e.message || e}). Se cargaron preguntas locales.` 
+          : `Error generating questions with AI (${e.message || e}). Local template questions loaded.`, 
+        "error"
       );
       
-      await fetch("/api/questions", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          projectId,
-          questions: fallbacks.map(q => ({ text: q.text, source: q.source }))
-        })
-      });
-      
-      const qRes = await fetch(`/api/questions?projectId=${projectId}`);
-      const qData = await qRes.json();
-      if (qData.questions) {
-        setQuestions(qData.questions.map((q: any) => ({
-          id: q.id,
-          text: q.text,
-          source: q.source,
-          category: getCategoryBadge(q.text),
-        })));
+      try {
+        await fetch("/api/questions", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            projectId,
+            questions: fallbacks.map(q => ({ text: q.text, source: q.source }))
+          })
+        });
+        
+        const qRes = await fetch(`/api/questions?projectId=${projectId}`);
+        const qData = await qRes.json();
+        if (qData.questions) {
+          setQuestions(qData.questions.map((q: any) => ({
+            id: q.id,
+            text: q.text,
+            source: q.source,
+            category: getCategoryBadge(q.text),
+          })));
+        }
+      } catch (innerError: any) {
+        console.error("Fallback questions save/load failed:", innerError);
       }
     } finally {
       setAuditLoading(false);
